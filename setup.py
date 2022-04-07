@@ -8,10 +8,11 @@ setup(
     install_requires=[
         'Click',
         'torch',
-        'numpy'
+        'numpy',
+        'matplotlib'
     ],
     entry_points='''
         [console_scripts]
-        qgpepr=qgpepr:cli
+        qgpepr=main:cli
     '''
 )
