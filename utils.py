@@ -2,8 +2,6 @@ import torch
 import numpy as np
 import matplotlib.pyplot as plt
 
-from numba import jit
-
 path_to_models = 'models'
 
 def predict(x, evolution_length=9):
