@@ -2,6 +2,8 @@ import torch
 import numpy as np
 import matplotlib.pyplot as plt
 
+from numba import jit
+
 path_to_models = 'models'
 
 def predict(x, evolution_length=9):
@@ -24,43 +26,31 @@ def predict(x, evolution_length=9):
 
     return Ed.reshape((-1, 256, 256)), Vx.reshape((-1, 256, 256)), Vy.reshape((-1, 256, 256))
 
-def save_evolution(evolution, path):
+def save_component(component, f):
     short_prefix = 6 * ' '
     long_prefix = 8 * ' '
-    
+
+    Comp0_str = '\n'.join(list(map(lambda x: short_prefix + np.array2string(x, separator=short_prefix,
+                                                                              floatmode='fixed')[1:-1], component[0])))
+    Comp0_str = long_prefix + f'{0:.8f}' + '\n' + Comp0_str + '\n'
+    f.write(Comp0_str)
+    for i in range(10):
+        Comp_str = '\n'.join(list(map(lambda x: short_prefix + np.array2string(x, separator=short_prefix,
+                                                                                floatmode='fixed')[1:-1], component[i])))
+        Comp_str = long_prefix + f'{i:.8f}' + '\n' + Comp_str + '\n'
+        f.write(Comp_str)
+
+
+def save_evolution(evolution, path):
     Ed, Vx, Vy = evolution
     with open(f'{path}/snapshot_Ed.dat', 'w') as f:
-        Ed0_str = '\n'.join(list(map(lambda x: short_prefix + np.array2string(x, separator=short_prefix,
-                                                                              floatmode='fixed')[1:-1], Ed[0])))
-        Ed0_str = long_prefix + f'{0:.8f}' + '\n' + Ed0_str + '\n'
-        f.write(Ed0_str)
-        for i in range(10):
-            Ed_str = '\n'.join(list(map(lambda x: short_prefix + np.array2string(x, separator=short_prefix,
-                                                                                 floatmode='fixed')[1:-1], Ed[i])))
-            Ed_str = long_prefix + f'{i:.8f}' + '\n' + Ed_str + '\n'
-            f.write(Ed_str)
+        save_component(Ed, f)
 
     with open(f'{path}/snapshot_Vx.dat', 'w') as f:
-        Vx0_str = '\n'.join(list(map(lambda x: short_prefix + np.array2string(x, separator=short_prefix,
-                                                                              floatmode='fixed')[1:-1], Vx[0])))
-        Vx0_str = long_prefix + f'{0:.8f}' + '\n' + Vx0_str + '\n'
-        f.write(Vx0_str)
-        for i in range(10):
-            Vx_str = '\n'.join(list(map(lambda x: short_prefix + np.array2string(x, separator=short_prefix,
-                                                                                 floatmode='fixed')[1:-1], Vx[i])))
-            Vx_str = long_prefix + f'{i:.8f}' + '\n' + Vx_str + '\n'
-            f.write(Vx_str)
+        save_component(Vx, f)
     
     with open(f'{path}/snapshot_Vy.dat', 'w') as f:
-        Vy0_str = '\n'.join(list(map(lambda x: short_prefix + np.array2string(x, separator=short_prefix,
-                                                                              floatmode='fixed')[1:-1], Vy[0])))
-        Vy0_str = long_prefix + f'{0:.8f}' + '\n' + Vy0_str + '\n'
-        f.write(Vy0_str)
-        for i in range(10):
-            Vy_str = '\n'.join(list(map(lambda x: short_prefix + np.array2string(x, separator=short_prefix,
-                                                                                 floatmode='fixed')[1:-1], Vy[i])))
-            Vy_str = long_prefix + f'{i:.8f}' + '\n' + Vy_str + '\n'
-            f.write(Vx_str)
+        save_component(Vy, f)
 
 def read_init(path):
     Ed = np.array([], dtype=np.float32)
