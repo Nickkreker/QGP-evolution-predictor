@@ -6,10 +6,12 @@ from utils import predict, save_evolution, read_init, plot_evolution
 @click.argument('input', type=click.Path(exists=True))
 @click.argument('output')
 @click.option('--visualize', is_flag=True,
-             help='Add visualisation of evolution to output')
+             help='Add visualisation of evolution to output.')
 @click.option('--verbose', '-v', is_flag=True,
-             help='Print additional runtime information')
-def cli(input, output, visualize, verbose):
+             help='Print additional runtime information.')
+@click.option('--threshold', default=0.005,
+             help='Values of Ed smaller than threshold are represented as zero. By default is 0.005.')
+def cli(input, output, visualize, verbose, threshold):
     start_time = time.perf_counter()
     if verbose:
         print('Reading input')
@@ -18,7 +20,7 @@ def cli(input, output, visualize, verbose):
 
     if verbose:
         print('Calculating evolution')
-    evolution = predict(Ed)
+    evolution = predict(Ed, threshold)
 
     if verbose:
         print('Saving evolution to file')
