@@ -8,7 +8,7 @@ setup(
     install_requires=[
         'Click',
         'torch',
-        'numpy',
+        'numpy>=1.7',
         'matplotlib'
     ],
     entry_points='''
