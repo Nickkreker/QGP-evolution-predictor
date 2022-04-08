@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 path_to_models = 'models'
 
-def predict(x, evolution_length=9):
+def predict(x, evolution_length=9, threshold=0.005):
     Ed = np.array((x))
     Vx = np.array((np.zeros_like(x)))
     Vy = np.array((np.zeros_like(x)))
@@ -22,6 +22,10 @@ def predict(x, evolution_length=9):
         Vx = np.append(Vx, prediction[0, 1])
         Vy = np.append(Vy, prediction[0, 2])
 
+    Ed[np.abs(Ed) < threshold] = 0
+    Vx = np.divide(Vx, Ed, out=np.zeros_like(Vx), where=Ed!=0)
+    Vy = np.divide(Vy, Ed, out=np.zeros_like(Vy), where=Ed!=0)
+
     return Ed.reshape((-1, 256, 256)), Vx.reshape((-1, 256, 256)), Vy.reshape((-1, 256, 256))
 
 def save_component(component, f):
@@ -33,7 +37,7 @@ def save_component(component, f):
     
     Comp0_str = long_prefix + f'{0:.8f}' + '\n' + Comp0_str + '\n'
     f.write(Comp0_str)
-
+ 
     for i in range(10):
         Comp_str = '\n'.join(list(map(lambda x: short_prefix + np.array2string(x, separator=short_prefix, max_line_width=10000,
                                                                                formatter={'float_kind':lambda x:(x>0)*' ' + f'{x:.8f}'})[1:-1], component[i])))
