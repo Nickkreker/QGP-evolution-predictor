@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 path_to_models = 'models'
 
-def predict(x, evolution_length=9, threshold=0.005):
+def predict(x, threshold=0.005):
     Ed = np.array((x))
     Vx = np.array((np.zeros_like(x)))
     Vy = np.array((np.zeros_like(x)))
