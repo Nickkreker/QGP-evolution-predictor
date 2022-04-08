@@ -13,4 +13,6 @@ pip install .
 ```
 
 ## Usage
+```
 qgpepr --verbose --visualize samples/snapshot3.dat out
+```
