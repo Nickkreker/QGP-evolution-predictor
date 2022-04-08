@@ -11,3 +11,6 @@ To install the package, use
 cd QGP-evolution-predictor
 pip install .
 ```
+
+## Usage
+qgpepr --verbose --visualize samples/snapshot3.dat out
