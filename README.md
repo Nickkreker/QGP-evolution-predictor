@@ -1,7 +1,5 @@
 # QGP-evolution-predictor
 
-# Сейчас я сломал проект, он не собирается
-
 ## Installing
 Download current repository to your local machine. Use
 ```
