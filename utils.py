@@ -33,14 +33,14 @@ def save_component(component, f):
     long_prefix = 8 * ' '
 
     Comp0_str = '\n'.join(list(map(lambda x: short_prefix + np.array2string(x, separator=short_prefix, max_line_width=10000,
-                                                                            formatter={'float_kind':lambda x:(x>0)*' ' + f'{x:.8f}'})[1:-1], component[0])),)
+                                                                            formatter={'float_kind':lambda x:f'{x:.8f}'})[1:-1], component[0])),)
     
     Comp0_str = long_prefix + f'{0:.8f}' + '\n' + Comp0_str + '\n'
     f.write(Comp0_str)
  
     for i in range(10):
         Comp_str = '\n'.join(list(map(lambda x: short_prefix + np.array2string(x, separator=short_prefix, max_line_width=10000,
-                                                                               formatter={'float_kind':lambda x:(x>0)*' ' + f'{x:.8f}'})[1:-1], component[i])))
+                                                                               formatter={'float_kind':lambda x:f'{x:.8f}'})[1:-1], component[i])))
         Comp_str = long_prefix + f'{i:.8f}' + '\n' + Comp_str + '\n'
         f.write(Comp_str)
 
