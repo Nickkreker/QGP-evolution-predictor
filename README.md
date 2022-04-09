@@ -6,7 +6,7 @@
 git clone https://github.com/Nickkreker/QGP-evolution-predictor.git
 ```
 
-Чтобы утановить приложение, используйте
+Чтобы уcтановить приложение, используйте
 ```
 cd QGP-evolution-predictor
 pip install .
