@@ -1,18 +1,24 @@
 # QGP-evolution-predictor
 
-## Installing
-Download current repository to your local machine. Use
+## Установка
+Скачайте репозиторий на локальную машину. Для этого используйте
 ```
 git clone https://github.com/Nickkreker/QGP-evolution-predictor.git
 ```
 
-To install the package, use
+Чтобы утановить приложение, используйте
 ```
 cd QGP-evolution-predictor
 pip install .
 ```
 
-## Usage
+## Использование
+Чтобы считать изначальное состояние (плотность энергии) из файла ```samples/snapshot3.dat``` и вывести предсказанную эволюцию в папку out, запустите
 ```
-qgpepr --verbose --visualize samples/snapshot3.dat out
+qgpepr samples/snapshot3.dat out
+```
+
+Чтобы посмотреть, какие есть параметры запуска, используйте
+```
+qgpepr --help
 ```
