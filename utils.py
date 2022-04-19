@@ -26,7 +26,13 @@ def predict(x, threshold=0.005):
     Vx = np.divide(Vx, Ed, out=np.zeros_like(Vx), where=Ed!=0)
     Vy = np.divide(Vy, Ed, out=np.zeros_like(Vy), where=Ed!=0)
 
-    return Ed.reshape((-1, 256, 256)), Vx.reshape((-1, 256, 256)), Vy.reshape((-1, 256, 256))
+    Ed, Vx, Vy = Ed.reshape((-1, 256, 256)), Vx.reshape((-1, 256, 256)), Vy.reshape((-1, 256, 256))
+    
+    Ed = np.pad(Ed, ((0, 0), (3, 2), (3, 2)), 'constant')
+    Vx = np.pad(Vx, ((0, 0), (3, 2), (3, 2)), 'constant')
+    Vy = np.pad(Vy, ((0, 0), (3, 2), (3, 2)), 'constant')
+
+    return Ed, Vx, Vy
 
 def save_component(component, f):
     short_prefix = 4 * ' '
