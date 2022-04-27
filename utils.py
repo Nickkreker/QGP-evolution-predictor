@@ -66,11 +66,10 @@ def read_init(path):
     Ed = np.array([], dtype=np.float32)
     with open(path, 'r') as f:
         for idx, line in enumerate(f):
-            if idx == 262:
+            if idx == 261:
                 break
-            if idx > 0:
-                t = np.fromstring(" ".join(line.split()), sep=' ', dtype=np.float32)
-                Ed = np.hstack((Ed, t))
+            t = np.fromstring(" ".join(line.split()), sep=' ', dtype=np.float32)
+            Ed = np.hstack((Ed, t))
 
     return Ed.reshape(261,261)[3:-2, 3:-2]
 
