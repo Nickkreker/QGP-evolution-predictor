@@ -75,14 +75,16 @@ def read_init(path):
 
 def plot_evolution(evolution, output, t_freeze=0.18, eps=0.01):
     Ed, Vx, Vy = evolution
-    fig = plt.figure(figsize=(30,9))
+    fig = plt.figure(figsize=(30,12))
     for i in range(len(Ed)):
-        fig.add_subplot(3, len(Ed), i + 1)
-        plt.imshow(Ed[i], alpha=0.9)
-        plt.imshow(np.abs(Ed[i]- t_freeze) < eps, alpha=0.1)
-        fig.add_subplot(3, len(Ed), i + len(Ed) + 1)
+        fig.add_subplot(4, len(Ed), i + 1)
+        plt.imshow(Ed[i])
+        # plt.imshow(np.abs(Ed[i]- t_freeze) < eps, alpha=0.1)
+        fig.add_subplot(4, len(Ed), i + len(Ed) + 1)
         plt.imshow(Vx[i], alpha=0.9)
-        fig.add_subplot(3, len(Ed), i + 2 * len(Ed) + 1)
+        fig.add_subplot(4, len(Ed), i + 2 * len(Ed) + 1)
         plt.imshow(Vy[i], alpha=0.9)
+        fig.add_subplot(4, len(Ed), i + 3 * len(Ed) + 1)
+        plt.imshow(np.abs(Ed[i]- t_freeze) < eps)
     plt.savefig(f'{output}/evolution.png')
 
