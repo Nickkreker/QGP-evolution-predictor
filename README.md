@@ -18,6 +18,11 @@ pip install .
 qgpepr samples/snapshot3.dat out
 ```
 
+Чтобы сделать предсказание с помощью циклической локальной модели, запустите
+```
+qgpepr -s samples/snapshot2.dat out
+```
+
 Чтобы посмотреть, какие есть параметры запуска, используйте
 ```
 qgpepr --help
