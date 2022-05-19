@@ -1,6 +1,6 @@
 import click
 import time
-from utils import predict, save_evolution, read_init, plot_evolution
+from utils import predict, predict_single_model, save_evolution, read_init, plot_evolution
 
 @click.command()
 @click.argument('input', type=click.Path(exists=True))
@@ -11,7 +11,9 @@ from utils import predict, save_evolution, read_init, plot_evolution
              help='Print additional runtime information.')
 @click.option('--threshold', default=0.005,
              help='Values of Ed smaller than threshold are represented as zero. By default is 0.005.')
-def cli(input, output, visualize, verbose, threshold):
+@click.option('--single', '-s', is_flag=True,
+             help='If set uses single model to construct evolution')
+def cli(input, output, visualize, verbose, threshold, single):
     start_time = time.perf_counter()
     if verbose:
         print('Reading input')
@@ -20,7 +22,12 @@ def cli(input, output, visualize, verbose, threshold):
 
     if verbose:
         print('Calculating evolution')
-    evolution = predict(Ed, threshold)
+
+    evolution = None
+    if single:
+        evolution = predict_single_model(Ed, threshold)
+    else:
+        evolution = predict(Ed, threshold)
 
     if verbose:
         print('Saving evolution to file')

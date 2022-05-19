@@ -34,6 +34,44 @@ def predict(x, threshold=0.005):
 
     return Ed, Vx, Vy
 
+
+def predict_single_model(x, threshold=0.005, e_freeze=0.18):
+    Ed = np.array((x))
+    Vx = np.array((np.zeros_like(x)))
+    Vy = np.array((np.zeros_like(x)))
+    t = np.zeros_like(x)
+
+    x = torch.from_numpy(np.array((x, np.zeros_like(x), np.zeros_like(x), t)))
+    x = torch.unsqueeze(x, 0)
+
+    model = torch.load(f'{path_to_models}/u_consec.pth')
+    model.eval()
+    while True:
+        x = model(x) 
+        prediction = x.detach().numpy() 
+        if np.max(prediction[0, 0]) < e_freeze:
+            break
+
+        Ed = np.append(Ed, prediction[0, 0])
+        Vx = np.append(Vx, prediction[0, 1])
+        Vy = np.append(Vy, prediction[0, 2])
+
+        t += 1
+        prediction = np.concatenate((prediction, np.expand_dims(t, axis=(0,1))), axis=1)
+        x = torch.from_numpy(prediction)
+
+    Ed[np.abs(Ed) < threshold] = 0
+    Vx = np.divide(Vx, Ed, out=np.zeros_like(Vx), where=Ed!=0)
+    Vy = np.divide(Vy, Ed, out=np.zeros_like(Vy), where=Ed!=0)
+
+    Ed, Vx, Vy = Ed.reshape((-1, 256, 256)), Vx.reshape((-1, 256, 256)), Vy.reshape((-1, 256, 256))
+    
+    Ed = np.pad(Ed, ((0, 0), (3, 2), (3, 2)), 'constant')
+    Vx = np.pad(Vx, ((0, 0), (3, 2), (3, 2)), 'constant')
+    Vy = np.pad(Vy, ((0, 0), (3, 2), (3, 2)), 'constant')
+
+    return Ed, Vx, Vy
+
 def save_component(component, f):
     short_prefix = 4 * ' '
     long_prefix = 8 * ' '
@@ -44,7 +82,7 @@ def save_component(component, f):
     Comp0_str = long_prefix + f'{0:.8f}' + '\n' + Comp0_str + '\n'
     f.write(Comp0_str)
  
-    for i in range(10):
+    for i in range(len(component)):
         Comp_str = '\n'.join(list(map(lambda x: short_prefix + np.array2string(x, separator=short_prefix, max_line_width=10000,
                                                                                formatter={'float_kind':lambda x:f'{x:12.8f}'})[1:-1], component[i])))
         Comp_str = long_prefix + f'{i:.8f}' + '\n' + Comp_str + '\n'
@@ -75,7 +113,7 @@ def read_init(path):
 
 def plot_evolution(evolution, output, t_freeze=0.18, eps=0.01):
     Ed, Vx, Vy = evolution
-    fig = plt.figure(figsize=(30,12))
+    fig = plt.figure(figsize=(len(Ed)*3,12))
     for i in range(len(Ed)):
         fig.add_subplot(4, len(Ed), i + 1)
         plt.imshow(Ed[i])
