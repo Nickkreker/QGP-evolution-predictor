@@ -12,7 +12,7 @@ from utils import predict, predict_single_model, save_evolution, read_init, plot
 @click.option('--threshold', default=0.005,
              help='Values of Ed smaller than threshold are represented as zero. By default is 0.005.')
 @click.option('--single', '-s', is_flag=True,
-             help='If set uses single model to construct evolution')
+             help='Use single model to construct evolution.')
 def cli(input, output, visualize, verbose, threshold, single):
     start_time = time.perf_counter()
     if verbose:
