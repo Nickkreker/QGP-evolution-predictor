@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 path_to_models = 'models'
 
-def predict(x, threshold=0.005):
+def predict(x, threshold=0.005, e_freeze=0.18):
     Ed = np.array((x))
     Vx = np.array((np.zeros_like(x)))
     Vy = np.array((np.zeros_like(x)))
@@ -17,6 +17,9 @@ def predict(x, threshold=0.005):
 
         x = model(x) 
         prediction = x.detach().numpy() 
+
+        if np.max(prediction[0, 0]) < e_freeze:
+            break
 
         Ed = np.append(Ed, prediction[0, 0])
         Vx = np.append(Vx, prediction[0, 1])
